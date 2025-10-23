@@ -1,0 +1,11 @@
+__pycache__
+env
+.env
+diff-upgrade.txt
+langsmith-values-non-root.yaml
+langsmith-values-root.yaml
+current-values.yaml
+97_setup_aks.md
+98_Readme.md
+python-apps
+*-test.js

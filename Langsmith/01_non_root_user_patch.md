@@ -18,7 +18,7 @@ for pod in $(kubectl get pods -n langchain -o name); do
 done
 ```
 
-Output is like this:
+Output:
 
 | Pod Name                                           | Container Name       | UID (User)       | GID (Group)      |
 |----------------------------------------------------|----------------------|------------------|------------------|
@@ -27,7 +27,7 @@ Output is like this:
 | langsmith-backend-7777d57c75-wpkj5                 | backend              | 0 (root)         | 0 (root)         |
 | langsmith-backend-auth-bootstrap-k8vcr             | auth-bootstrap       | —                | —                |
 | langsmith-backend-ch-migrations-pvgqt              | ch-migrations        | —                | —                |
-| langsmith-backend-config-migrations-bwj4c           | feedback-migrations  | —                | —                |
+| langsmith-backend-config-migrations-bwj4c          | feedback-migrations  | —                | —                |
 | langsmith-backend-fb-migrations-rzhz8              | config-migrations    | —                | —                |
 | langsmith-backend-migrations-xprsz                 | pg-migrations        | —                | —                |
 | langsmith-clickhouse-0                             | clickhouse           | 0 (root)         | 0 (root)         |
@@ -40,18 +40,7 @@ Output is like this:
 | langsmith-queue-54cdf8f4b8-lfbfz                   | queue                | 0 (root)         | 0 (root)         |
 | langsmith-queue-54cdf8f4b8-xtjbd                   | queue                | 0 (root)         | 0 (root)         |
 
-## Get the statefulsets in langchain namespace
-```sh
-k get statefulset -n langchain
-
-NAME                   READY   AGE
-langsmith-clickhouse   1/1     12m
-```
-
-Ensure that only the clickhouse statefulset exists.
-
-
-## Dry run the upgrade to see what will change
+## Use Helm Diff to view the delta
 ```sh
 helm plugin install https://github.com/databus23/helm-diff --version v3.9.8
 
@@ -76,12 +65,10 @@ ClickHouse Pods may restart, but data should remain intact.
 +               type: RuntimeDefault
 ```
 
-volumeClaimTemplates shouldn't be altered by any means! Quick Search the diff:
+The volumeClaimTemplates section must not be altered! Run a quick search in the diff:
 ```sh
 grep -n -A20 -B10 "volumeClaimTemplates" diff-upgrade.txt
 ```
-
-
 
 ## Perform the upgrade
 ```sh
@@ -110,7 +97,7 @@ for pod in $(kubectl get pods -n langchain -o name); do
 done
 ```
 
-
+Output
 | Pod Name                                           | Container Name       | UID (User)       | GID (Group)      |
 |----------------------------------------------------|----------------------|------------------|------------------|
 | langsmith-ace-backend-84b6f855d7-xz8d8               | ace-backend         | 1000     | 1000   |

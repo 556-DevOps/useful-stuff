@@ -5,6 +5,7 @@ aceBackend:
       runAsUser: 1000
       runAsGroup: 1000
       fsGroup: 1000
+      
     securityContext:
       capabilities:
         drop:
@@ -25,6 +26,8 @@ aceBackend:
         mountPath: /.cache
 
 backend:
+  feedbackDataMigration:
+    enabled: false
   deployment:
     podSecurityContext:
       runAsNonRoot: true
@@ -415,6 +418,7 @@ playground:
         mountPath: /tmp
 
 queue:
+  containerPort: 8080
   deployment:
     podSecurityContext:
       runAsNonRoot: true
@@ -459,3 +463,6 @@ clickhouse:
         mountPath: /var
       - name: etc
         mountPath: /etc/clickhouse-server/users.d
+
+istioGateway:
+  enabled: false

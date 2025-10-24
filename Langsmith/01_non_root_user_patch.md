@@ -40,14 +40,19 @@ Output:
 | langsmith-queue-54cdf8f4b8-lfbfz                   | queue                | 0 (root)         | 0 (root)         |
 | langsmith-queue-54cdf8f4b8-xtjbd                   | queue                | 0 (root)         | 0 (root)         |
 
+## Create the merged-values.yaml
+```sh
+helm get values langsmith -o yaml > current-values.yaml
+cat current-values.yaml langsmith-values-non-root-patch.yaml > merged-values.yaml
+```
+
 ## Use Helm Diff to view the delta
 ```sh
 helm plugin install https://github.com/databus23/helm-diff --version v3.9.8
 
 helm diff upgrade langsmith langchain/langsmith \
   -n langchain \
-  --reuse-values \
-  -f langsmith-values-non-root-patch.yaml > diff-upgrade.txt
+  -f merged-values.yaml > diff-upgrade.txt
 ```
 
 Your upgrade is safe for existing persistent stores if you only modify securityContext, podSecurityContext, volumes, volumeMounts, and don’t change the PVC definitions.
@@ -74,8 +79,7 @@ grep -n -A20 -B10 "volumeClaimTemplates" diff-upgrade.txt
 ```sh
 helm upgrade langsmith langchain/langsmith \
   -n langchain \
-  --reuse-values \
-  -f langsmith-values-non-root-patch.yaml \
+  -f merged-values.yaml \
   --wait --debug
 ```
 

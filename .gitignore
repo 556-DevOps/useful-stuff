@@ -6,7 +6,8 @@ langsmith-values-non-root.yaml
 langsmith-values-root.yaml
 current-values.yaml
 merged-values.yaml
+96_clickhouse_explore.md
 97_setup_aks.md
-98_Readme.md
+98_setup_environment.md
 python-apps
 *-test.js
